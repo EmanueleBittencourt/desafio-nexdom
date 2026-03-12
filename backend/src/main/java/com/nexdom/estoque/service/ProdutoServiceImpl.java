@@ -1,6 +1,7 @@
 package com.nexdom.estoque.service;
 
 import com.nexdom.estoque.model.Produto;
+import com.nexdom.estoque.model.TipoProduto;
 import com.nexdom.estoque.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,12 @@ public class ProdutoServiceImpl implements ProdutoService {
     @Transactional(readOnly = true)
     public Optional<Produto> buscarPorId(Long id) {
         return produtoRepository.findById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Produto> listarPorTipo(TipoProduto tipo) {
+        return produtoRepository.findByTipo(tipo);
     }
 
     @Override
