@@ -55,8 +55,8 @@ class ProdutoControllerTest {
 
     @Test
     @DisplayName("GET /api/produtos retorna 200 e lista de produtos")
-    void listarTodos_deveRetornar200() throws Exception {
-        when(produtoService.listarTodos()).thenReturn(List.of(produto(1L)));
+    void buscarTodos_deveRetornar200() throws Exception {
+        when(produtoService.buscarTodos()).thenReturn(List.of(produto(1L)));
 
         mockMvc.perform(get("/api/produtos"))
                 .andExpect(status().isOk())
@@ -64,7 +64,7 @@ class ProdutoControllerTest {
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].codigo").value("COD-001"));
 
-        verify(produtoService).listarTodos();
+        verify(produtoService).buscarTodos();
     }
 
     @Test
@@ -98,7 +98,7 @@ class ProdutoControllerTest {
         novo.setId(null);
         Produto salvo = produto(1L);
 
-        when(produtoService.salvar(any(Produto.class))).thenReturn(salvo);
+        when(produtoService.criar(any(Produto.class))).thenReturn(salvo);
 
         mockMvc.perform(post("/api/produtos")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -107,7 +107,7 @@ class ProdutoControllerTest {
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.codigo").value("COD-001"));
 
-        verify(produtoService).salvar(any(Produto.class));
+        verify(produtoService).criar(any(Produto.class));
     }
 
     @Test

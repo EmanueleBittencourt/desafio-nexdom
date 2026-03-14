@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface MovimentoEstoqueService {
 
-    List<MovimentoEstoque> listarTodos();
+    List<MovimentoEstoque> buscarTodos();
 
     Optional<MovimentoEstoque> buscarPorId(Long id);
 
-    MovimentoEstoque salvar(MovimentoEstoque movimento);
+    MovimentoEstoque criar(MovimentoEstoque movimento);
 }

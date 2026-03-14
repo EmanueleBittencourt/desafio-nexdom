@@ -1,5 +1,6 @@
 package com.nexdom.estoque.controller;
 
+import com.nexdom.estoque.dto.LucroProdutoResponse;
 import com.nexdom.estoque.model.Produto;
 import com.nexdom.estoque.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,8 @@ public class ProdutoController {
     private final ProdutoService produtoService;
 
     @GetMapping
-    public ResponseEntity<List<Produto>> listarTodos() {
-        return ResponseEntity.ok(produtoService.listarTodos());
+    public ResponseEntity<List<Produto>> buscarTodos() {
+        return ResponseEntity.ok(produtoService.buscarTodos());
     }
 
     @GetMapping("/{id}")
@@ -35,9 +36,18 @@ public class ProdutoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/{id}/lucro")
+    public ResponseEntity<LucroProdutoResponse> buscarLucroPorProduto(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(produtoService.getLucroPorProduto(id));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping
     public ResponseEntity<Produto> criar(@RequestBody Produto produto) {
-        Produto salvo = produtoService.salvar(produto);
+        Produto salvo = produtoService.criar(produto);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
 

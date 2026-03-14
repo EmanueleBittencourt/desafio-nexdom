@@ -21,7 +21,7 @@ public class MovimentoEstoqueServiceImpl implements MovimentoEstoqueService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<MovimentoEstoque> listarTodos() {
+    public List<MovimentoEstoque> buscarTodos() {
         return movimentoEstoqueRepository.findAll();
     }
 
@@ -33,7 +33,7 @@ public class MovimentoEstoqueServiceImpl implements MovimentoEstoqueService {
 
     @Override
     @Transactional
-    public MovimentoEstoque salvar(MovimentoEstoque movimento) {
+    public MovimentoEstoque criar(MovimentoEstoque movimento) {
         Produto produto = produtoRepository.findById(movimento.getProduto().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado com id: " + movimento.getProduto().getId()));
 

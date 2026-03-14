@@ -22,8 +22,8 @@ public class MovimentoEstoqueController {
     private final MovimentoEstoqueService movimentoEstoqueService;
 
     @GetMapping
-    public ResponseEntity<List<MovimentoEstoque>> listarTodos() {
-        return ResponseEntity.ok(movimentoEstoqueService.listarTodos());
+    public ResponseEntity<List<MovimentoEstoque>> buscarTodos() {
+        return ResponseEntity.ok(movimentoEstoqueService.buscarTodos());
     }
 
     @GetMapping("/{id}")
@@ -35,7 +35,7 @@ public class MovimentoEstoqueController {
 
     @PostMapping
     public ResponseEntity<MovimentoEstoque> criar(@RequestBody MovimentoEstoque movimento) {
-        MovimentoEstoque salvo = movimentoEstoqueService.salvar(movimento);
+        MovimentoEstoque salvo = movimentoEstoqueService.criar(movimento);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
 }
