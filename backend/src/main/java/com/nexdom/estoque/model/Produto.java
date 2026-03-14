@@ -39,9 +39,6 @@ public class Produto {
     @Column(name = "quantidade_estoque", nullable = false)
     private Integer quantidadeEstoque;
 
-    @Column(name = "quantidade_total_saida", nullable = false, columnDefinition = "int default 0")
-    private Integer quantidadeTotalSaida = 0;
-
     @CreationTimestamp
     @Column(name = "data_cadastro", nullable = false)
     private LocalDateTime dataCadastro;

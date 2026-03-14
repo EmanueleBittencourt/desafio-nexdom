@@ -39,22 +39,13 @@ public class MovimentoEstoqueServiceImpl implements MovimentoEstoqueService {
 
         int quantidadeAtual = produto.getQuantidadeEstoque();
         int quantidadeMovimentada = movimento.getQuantidadeMovimentada();
-        int novaQuantidade;
 
-        if (movimento.getTipo() == TipoMovimento.SAIDA) {
-            if (quantidadeAtual < quantidadeMovimentada) {
-                throw new IllegalStateException(
-                        "Estoque insuficiente. Disponível: " + quantidadeAtual + ", solicitado: " + quantidadeMovimentada);
-            }
-            novaQuantidade = quantidadeAtual - quantidadeMovimentada;
-
-            int totalSaidas = (produto.getQuantidadeTotalSaida() != null ? produto.getQuantidadeTotalSaida() : 0);
-            produto.setQuantidadeTotalSaida(totalSaidas + quantidadeMovimentada);
-        } else {
-            novaQuantidade = quantidadeAtual + quantidadeMovimentada;
+        if (movimento.getTipo() == TipoMovimento.SAIDA && quantidadeAtual < quantidadeMovimentada) {
+            throw new IllegalStateException(
+                    "Estoque insuficiente. Disponível: " + quantidadeAtual + ", solicitado: " + quantidadeMovimentada);
         }
 
-        produto.setQuantidadeEstoque(novaQuantidade);
+        produto.setQuantidadeEstoque(quantidadeAtual + (movimento.getTipo() == TipoMovimento.SAIDA ? -quantidadeMovimentada : quantidadeMovimentada));
         produtoRepository.save(produto);
 
         movimento.setProduto(produto);
