@@ -15,4 +15,12 @@ public interface MovimentoEstoqueRepository extends JpaRepository<MovimentoEstoq
     List<MovimentoEstoque> findAllWithProduto();
 
     List<MovimentoEstoque> findByProdutoIdAndTipo(Long produtoId, TipoMovimento tipo);
+
+    @Query("SELECT m.produto.id, SUM(m.quantidadeMovimentada) FROM MovimentoEstoque m WHERE m.tipo = 'SAIDA' GROUP BY m.produto.id")
+    List<Object[]> sumQuantidadeSaidaByProdutoId();
+
+    @Query("SELECT COALESCE(SUM(m.quantidadeMovimentada), 0) FROM MovimentoEstoque m WHERE m.tipo = :tipo AND m.produto.id IN :produtoIds")
+    Long sumQuantidadeByTipoAndProdutoIdIn(TipoMovimento tipo, List<Long> produtoIds);
+
+    List<MovimentoEstoque> findByProdutoIdInAndTipo(List<Long> produtoIds, TipoMovimento tipo);
 }

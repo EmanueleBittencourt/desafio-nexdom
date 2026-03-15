@@ -1,6 +1,7 @@
 package com.nexdom.estoque.controller;
 
 import com.nexdom.estoque.dto.LucroProdutoResponse;
+import com.nexdom.estoque.dto.ResumoVendasProdutoDTO;
 import com.nexdom.estoque.dto.TipoProdutoOption;
 import com.nexdom.estoque.model.Produto;
 import com.nexdom.estoque.model.TipoProduto;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
@@ -44,8 +46,30 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Produto>> buscarTodos() {
-        return ResponseEntity.ok(produtoService.buscarTodos());
+    public ResponseEntity<?> listar(
+            @RequestParam(required = false) String tipo,
+            @RequestParam(required = false, defaultValue = "false") boolean paraFiltro,
+            @RequestParam(required = false, defaultValue = "false") boolean resumo,
+            @RequestParam(required = false, defaultValue = "false") boolean resumoVendas,
+            @RequestParam(required = false) Long produtoId) {
+        if (Boolean.TRUE.equals(resumoVendas)) {
+            return ResponseEntity.ok(produtoService.getResumoVendas(produtoId));
+        }
+        if (Boolean.TRUE.equals(resumo)) {
+            return ResponseEntity.ok(produtoService.getResumoEstoque(produtoId));
+        }
+        if (Boolean.TRUE.equals(paraFiltro)) {
+            return ResponseEntity.ok(produtoService.listarTodosParaFiltro());
+        }
+        if (tipo != null && !tipo.isBlank()) {
+            try {
+                TipoProduto tipoEnum = TipoProduto.valueOf(tipo.trim().toUpperCase());
+                return ResponseEntity.ok(produtoService.buscarPorTipo(tipoEnum));
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.ok(produtoService.buscarTodosComResumo());
+            }
+        }
+        return ResponseEntity.ok(produtoService.buscarTodosComResumo());
     }
 
     @GetMapping("/{id}")
@@ -59,6 +83,16 @@ public class ProdutoController {
     public ResponseEntity<LucroProdutoResponse> buscarLucroPorProduto(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(produtoService.getLucroPorProduto(id));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    /** Resumo de vendas do produto: quantidade total de saídas, valor total de venda e lucro. */
+    @GetMapping("/{id}/resumo-vendas")
+    public ResponseEntity<ResumoVendasProdutoDTO> resumoVendasPorProduto(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(produtoService.getResumoVendasPorProduto(id));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }

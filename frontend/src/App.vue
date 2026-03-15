@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import logo from '@/assets/media/Logo2.webp'
+import logo from '@/assets/media/Logo3.png'
 </script>
 
 <template>
@@ -39,8 +39,8 @@ import logo from '@/assets/media/Logo2.webp'
   justify-content: space-between;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0.25rem 1rem; /* padding menor para caber logo maior */
-  min-height: 64px; /* altura fixa do header */
+  padding: 4px 0px;
+  min-height: 64px;
   box-sizing: border-box;
 }
 
@@ -48,6 +48,7 @@ import logo from '@/assets/media/Logo2.webp'
   display: flex;
   align-items: center;
   padding: 0;
+  margin-left: -35px;
   text-decoration: none;
   border-bottom: 2px solid transparent !important;
 }

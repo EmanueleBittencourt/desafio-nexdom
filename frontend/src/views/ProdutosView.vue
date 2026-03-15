@@ -91,7 +91,6 @@ async function carregarProdutos() {
   }
 }
 
-/** Envia o formulário: POST (criar) ou PUT (atualizar) conforme produtoEmEdicao. */
 async function salvarProduto(e: Event) {
   e.preventDefault()
   if (loading.value) return
@@ -290,28 +289,46 @@ onMounted(async () => {
                   @click="abrirModal(p, 'ENTRADA')">
                   Entrada
                 </button>
-                <button type="button" class="btn btn-sm btn-saida" :disabled="loading || p.quantidadeEstoque === 0"
-                  @click="abrirModal(p, 'SAIDA')">
-                  Saída
-                </button>
+                <span
+                  class="btn-tooltip"
+                  :class="{ 'btn-tooltip--disabled': (p.quantidadeEstoque ?? 0) === 0 }"
+                >
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-saida"
+                    :disabled="loading || p.quantidadeEstoque === 0"
+                    @click="abrirModal(p, 'SAIDA')"
+                  >
+                    Saída
+                  </button>
+                  <span class="btn-tooltip__text" aria-hidden="true">
+                    Só é possível registrar saída quando houver quantidade em estoque.
+                  </span>
+                </span>
                 <button type="button" class="btn btn-sm btn-editar" :disabled="loading || p.quantidadeEstoque === 0"
                   @click="editarProduto(p)">
                   Editar
                 </button>
 
                 <span
-                  class="btn-excluir-tooltip"
-                  :class="{ 'btn-excluir-tooltip--disabled': (p.quantidadeEstoque ?? 0) !== 0 }"
+                  class="btn-tooltip"
+                  :class="{ 'btn-tooltip--disabled': (p.quantidadeEstoque ?? 0) !== 0 }"
                 >
                   <button
                     type="button"
-                    class="btn btn-sm btn-excluir"
+                    class="btn btn-sm btn-excluir btn-icon"
                     :disabled="loading || (p.quantidadeEstoque ?? 0) !== 0"
+                    aria-label="Excluir"
                     @click="excluirProduto(p)"
                   >
-                    Excluir
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <polyline points="3 6 5 6 21 6" />
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                      <line x1="10" y1="11" x2="10" y2="17" />
+                      <line x1="14" y1="11" x2="14" y2="17" />
+                    </svg>
                   </button>
-                  <span class="btn-excluir-tooltip__text" aria-hidden="true"
+                  <span class="btn-tooltip__text" aria-hidden="true"
                     >Só é possível excluir quando o estoque for zero.</span
                   >
                 </span>
@@ -435,48 +452,19 @@ onMounted(async () => {
   --radius: 12px;
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  padding: 10px 20px;
-  min-height: calc(100vh - 64px);
-  box-sizing: border-box;
   color: var(--text);
-  display: flex;
-  flex-direction: column;
-}
-
-.page-header {
-  margin-bottom: 2rem;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1rem;
-}
-
-.page-header h1 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  margin: 0 0 0.25rem 0;
-  letter-spacing: -0.02em;
-}
-
-.subtitle {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 0.95rem;
-  flex-basis: 100%;
 }
 
 .btn-criar {
   margin-left: auto;
+  margin-top: 10px;
 }
 
 .modal-novo-produto {
-  max-width: min(600px, calc(100vw - 2rem));
+  max-width: min(600px, calc(100vw - 32px));
   width: 100%;
   background: var(--card-bg);
-  max-height: calc(100vh - 2rem);
+  max-height: calc(100vh - 32px);
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
@@ -487,7 +475,7 @@ onMounted(async () => {
 }
 
 .modal-novo-produto .modal-form {
-  padding: 1rem 1.25rem 1.25rem;
+  padding: 16px 20px 20px;
 }
 
 .modal-novo-produto .modal-form .field {
@@ -497,7 +485,7 @@ onMounted(async () => {
 .form-grid-modal {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.6rem 1.25rem;
+  gap: 10px 20px;
 }
 
 .form-grid-modal .field-full {
@@ -506,15 +494,15 @@ onMounted(async () => {
 
 .form-grid-modal .modal-actions {
   grid-column: 1 / -1;
-  margin-top: 0.25rem;
-  padding-top: 0.75rem;
+  margin-top: 4px;
+  padding-top: 12px;
   border-top: 1px solid var(--card-border);
 }
 
 @media (max-width: 480px) {
   .modal-novo-produto {
-    max-width: calc(100vw - 1rem);
-    max-height: calc(100vh - 1rem);
+    max-width: calc(100vw - 16px);
+    max-height: calc(100vh - 16px);
   }
 
   .form-grid-modal {
@@ -526,45 +514,17 @@ onMounted(async () => {
   }
 }
 
-.card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.table-card {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
-.table-card .table-wrap {
-  flex: 1;
-  min-height: 400px;
-}
-
-.card h2 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 0 0 1rem 0;
-  color: var(--text);
-}
-
 .form-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 1rem;
+  gap: 16px;
   align-items: end;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 6px;
 }
 
 .field-actions {
@@ -572,17 +532,17 @@ onMounted(async () => {
 }
 
 .field label {
-  font-size: 0.8rem;
+  font-size: 13px;
   font-weight: 500;
   color: var(--text-muted);
 }
 
 .field input,
 .field select {
-  padding: 0.5rem 0.75rem;
+  padding: 8px 12px;
   border: 1px solid var(--card-border);
   border-radius: 8px;
-  font-size: 0.9rem;
+  font-size: 14px;
   background: var(--card-bg);
   color: var(--text);
 }
@@ -595,14 +555,14 @@ onMounted(async () => {
 }
 
 .hint {
-  font-size: 0.75rem;
+  font-size: 12px;
   color: var(--text-muted);
 }
 
 .btn {
-  padding: 0.5rem 1rem;
+  padding: 8px 16px;
   border-radius: 8px;
-  font-size: 0.9rem;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   border: none;
@@ -633,8 +593,19 @@ onMounted(async () => {
 }
 
 .btn-sm {
-  padding: 0.35rem 0.65rem;
-  font-size: 0.8rem;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+}
+
+.btn-icon svg {
+  display: block;
 }
 
 .btn-entrada {
@@ -651,24 +622,29 @@ onMounted(async () => {
   color: #fff;
 }
 
+.btn-excluir {
+  background: var(--error);
+  color: #fff;
+}
+
 .btn-saida:hover:not(:disabled) {
   background: var(--saida-hover);
 }
 
-.btn-excluir-tooltip {
+.btn-tooltip {
   display: inline-block;
   position: relative;
 }
 
-.btn-excluir-tooltip__text {
+.btn-tooltip__text {
   position: absolute;
   bottom: calc(100% + 6px);
   left: 50%;
   transform: translateX(-50%);
-  padding: 0.4rem 0.6rem;
+  padding: 6px 10px;
   background: var(--primary);
   color: #fff;
-  font-size: 0.75rem;
+  font-size: 12px;
   white-space: nowrap;
   border-radius: 6px;
   pointer-events: none;
@@ -679,7 +655,7 @@ onMounted(async () => {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.btn-excluir-tooltip__text::after {
+.btn-tooltip__text::after {
   content: '';
   position: absolute;
   top: 100%;
@@ -690,115 +666,40 @@ onMounted(async () => {
 }
 
 /* Quando desabilitado, o botão não captura o hover; o span recebe e mostra o tooltip */
-.btn-excluir-tooltip--disabled .btn {
+/* Quando desabilitado, o botão não captura o hover; o span recebe e mostra o tooltip */
+/* Quando desabilitado, o botão não captura o hover; o span recebe e mostra o tooltip */
+.btn-tooltip--disabled .btn {
   pointer-events: none;
 }
 
-.btn-excluir-tooltip--disabled:hover .btn-excluir-tooltip__text {
+.btn-tooltip--disabled:hover .btn-tooltip__text {
   opacity: 1;
   visibility: visible;
 }
 
 .cell-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .backend-online {
   color: var(--color-success, #059669);
-  font-size: 0.85rem;
-  margin-bottom: 0.5rem;
+  font-size: 14px;
+  margin-bottom: 8px;
 }
 
 .backend-offline {
   color: var(--error);
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
+  font-size: 14px;
+  margin-bottom: 8px;
 }
 
 .backend-offline code {
   background: rgba(0, 0, 0, 0.06);
-  padding: 0.1rem 0.35rem;
+  padding: 2px 6px;
   border-radius: 4px;
   font-size: 0.85em;
-}
-
-.error-msg {
-  color: var(--error);
-  font-size: 0.9rem;
-  margin: -0.5rem 0 1rem 0;
-  padding: 0.5rem 0;
-}
-
-.loading,
-.empty {
-  text-align: center;
-  padding: 2rem;
-  color: var(--text-muted);
-  font-size: 0.95rem;
-}
-
-.table-wrap {
-  overflow-x: auto;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-}
-
-.table th,
-.table td {
-  padding: 0.75rem 1rem;
-  text-align: left;
-  border-bottom: 1px solid var(--card-border);
-}
-
-.table th {
-  font-weight: 600;
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.table tbody tr:hover {
-  background: #f9fafb;
-}
-
-@media (max-width: 640px) {
-  .table thead {
-    display: none;
-  }
-
-  .table tr {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid var(--card-border);
-  }
-
-  .table td {
-    padding: 0.25rem 0;
-    border: none;
-  }
-
-  .table td::before {
-    content: attr(data-label);
-    font-weight: 600;
-    color: var(--text-muted);
-    font-size: 0.75rem;
-    display: block;
-    margin-bottom: 0.15rem;
-  }
-
-  .cell-actions {
-    width: 100%;
-    justify-content: flex-start;
-  }
 }
 
 .modal-backdrop {
