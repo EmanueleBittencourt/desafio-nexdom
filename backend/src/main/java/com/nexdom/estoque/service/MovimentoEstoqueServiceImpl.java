@@ -22,7 +22,7 @@ public class MovimentoEstoqueServiceImpl implements MovimentoEstoqueService {
     @Override
     @Transactional(readOnly = true)
     public List<MovimentoEstoque> buscarTodos() {
-        return movimentoEstoqueRepository.findAll();
+        return movimentoEstoqueRepository.findAllWithProduto();
     }
 
     @Override

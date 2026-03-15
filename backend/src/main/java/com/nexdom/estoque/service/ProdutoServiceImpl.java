@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,31 +26,40 @@ public class ProdutoServiceImpl implements ProdutoService {
     @Override
     @Transactional(readOnly = true)
     public List<Produto> buscarTodos() {
-        return produtoRepository.findAll();
+        return produtoRepository.findAllByDataExclusaoIsNull();
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<Produto> buscarPorId(Long id) {
-        return produtoRepository.findById(id);
+        return produtoRepository.findByIdAndDataExclusaoIsNull(id);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Produto> buscarPorTipo(TipoProduto tipo) {
-        return produtoRepository.findByTipo(tipo);
+        return produtoRepository.findByTipoAndDataExclusaoIsNull(tipo);
     }
 
     @Override
     @Transactional
     public Produto criar(Produto produto) {
-        return produtoRepository.save(produto);
+        LocalDateTime agora = LocalDateTime.now();
+        produto.setDataCadastro(agora);
+        produto.setDataAtualizacao(agora);
+        if (produto.getValorFornecedor() == null) {
+            produto.setValorFornecedor(BigDecimal.ZERO);
+        }
+        if (produto.getQuantidadeEstoque() == null) {
+            produto.setQuantidadeEstoque(0);
+        }
+        return produtoRepository.saveAndFlush(produto);
     }
 
     @Override
     @Transactional
     public Produto atualizar(Long id, Produto produto) {
-        return produtoRepository.findById(id)
+        return produtoRepository.findByIdAndDataExclusaoIsNull(id)
                 .map(existente -> {
                     existente.setCodigo(produto.getCodigo());
                     existente.setDescricao(produto.getDescricao());
@@ -64,7 +74,13 @@ public class ProdutoServiceImpl implements ProdutoService {
     @Override
     @Transactional
     public void excluir(Long id) {
-        produtoRepository.deleteById(id);
+        Produto produto = produtoRepository.findByIdAndDataExclusaoIsNull(id)
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado com id: " + id));
+        if (produto.getQuantidadeEstoque() != null && produto.getQuantidadeEstoque() != 0) {
+            throw new IllegalStateException("Produto só pode ser excluído quando a quantidade em estoque for zero.");
+        }
+        produto.setDataExclusao(LocalDateTime.now());
+        produtoRepository.save(produto);
     }
 
     @Override

@@ -46,4 +46,7 @@ public class Produto {
     @CreationTimestamp
     @Column(name = "data_atualizacao", nullable = false)
     private LocalDateTime dataAtualizacao;
+
+    @Column(name = "data_exclusao")
+    private LocalDateTime dataExclusao;
 }
