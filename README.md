@@ -17,7 +17,7 @@ Sistema fullstack de controle de estoque: **backend** em Java (Spring Boot) e **
 ### 1. Clonar o repositório (se ainda não tiver)
 
 ```bash
-git clone <url-do-repositorio>
+git clone https://github.com/EmanueleBittencourt/desafio-nexdom.git
 cd desafio-nexdom
 ```
 
@@ -75,10 +75,6 @@ O frontend sobe com **Vite**. Abra no navegador o endereço indicado no terminal
 
 ---
 
-**Ordem recomendada:** iniciar o backend primeiro e depois o frontend.
-
----
-
 ## Testes
 
 **Backend (na pasta `backend`):**
@@ -100,23 +96,13 @@ npm run test:unit
 Foi incluído no projeto o arquivo `backend/src/main/resources/import.sql`, que é executado automaticamente ao subir a aplicação. 
 Ele insere produtos e movimentos de exemplo para uma melhor visualização da interface.
 
-Isso depende da configuração em `backend/src/main/resources/application.properties` (JPA / Hibernate):
+Isso está configurado em `backend/src/main/resources/application.properties` (JPA / Hibernate):
 
-- `spring.jpa.hibernate.ddl-auto=create-drop` — recria o banco a cada execução e, ao encerrar a aplicação, apaga tudo.
-- `spring.jpa.defer-datasource-initialization=true` — faz o Hibernate esperar a inicialização do datasource antes de criar o schema, permitindo que o `import.sql` rode após as tabelas existirem.
-- `spring.sql.init.mode=always` — garante que o script SQL de inicialização seja executado sempre que a aplicação sobe.
-
-**Se quiser manter os dados entre execuções (não dropar o banco ao fechar):**
+**Se não quiser que o `import.sql` rode em toda subida:**
 
 1. Abra `backend/src/main/resources/application.properties`.
-2. Troque a linha:
-   ```properties
-   spring.jpa.hibernate.ddl-auto=create-drop
-   ```
-   por uma das opções:
-   - `spring.jpa.hibernate.ddl-auto=update` — mantém os dados e atualiza o schema se houver mudanças nas entidades (recomendado para desenvolvimento).
-   - `spring.jpa.hibernate.ddl-auto=validate` — só valida o schema; não altera nem recria (use se o banco já estiver criado e você não quiser alterações).
-3. (Opcional) Se não quiser que o `import.sql` rode em toda subida (evitar duplicar dados), altere:
+
+2. Altere:
    ```properties
    spring.sql.init.mode=always
    ```
