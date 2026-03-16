@@ -55,9 +55,11 @@ cd backend
 
 Aguarde até aparecer algo como: `Started EstoqueApiApplication`. A API estará em:
 
-- **Base URL:** `http://localhost:8080`
-- **Endpoints da API:** `http://localhost:8080/api/...`
+- **Base URL da API:** `http://localhost:8080` (abrir só a raiz no navegador dá 404 — é normal; a API não tem página em `/`)
+- **Endpoints:** `http://localhost:8080/api/...`
 - **Console H2:** `http://localhost:8080/h2-console`
+
+Para usar o sistema no navegador, acesse o **frontend** (passo 3); a interface fica em `http://localhost:5173`.
 
 **Banco H2 (para acessar pelo console):**
 
@@ -77,18 +79,11 @@ npm install
 npm run dev
 ```
 
-O frontend sobe com **Vite**. Abra no navegador o endereço indicado no terminal (geralmente `http://localhost:5173`).
+O frontend sobe com **Vite**. Abra no navegador o endereço indicado no terminal (`http://localhost:5173`).
 
 O frontend já está configurado para falar com a API em `http://localhost:8080/api`.
 
 ---
-
-### 4. Resumo rápido
-
-| Componente | Comando              | URL principal           |
-|-----------|----------------------|-------------------------|
-| Backend   | `cd backend` → `.\mvnw.cmd spring-boot:run` | http://localhost:8080   |
-| Frontend  | `cd frontend` → `npm install` → `npm run dev` | http://localhost:5173   |
 
 **Ordem recomendada:** iniciar o backend primeiro e depois o frontend.
 
@@ -109,54 +104,3 @@ npm run test:unit
 ```
 
 ---
-
-## Build para produção
-
-**Backend (JAR):**
-
-```bash
-cd backend
-.\mvnw.cmd clean package -DskipTests
-```
-
-O JAR ficará em `backend/target/`. Para executar:
-
-```bash
-java -jar target/estoque-api-0.0.1-SNAPSHOT.jar
-```
-
-**Frontend (estático):**
-
-```bash
-cd frontend
-npm run build
-```
-
-Os arquivos estarão em `frontend/dist/`. Para servir localmente:
-
-```bash
-npm run preview
-```
-
----
-
-## Estrutura do projeto
-
-```
-desafio-nexdom/
-├── backend/          # API Spring Boot (Java 21, H2, JPA)
-│   ├── src/
-│   └── pom.xml
-├── frontend/         # Vue 3 + Vite + TypeScript
-│   ├── src/
-│   └── package.json
-└── README.md
-```
-
----
-
-## Problemas comuns
-
-- **Frontend não carrega dados:** confira se o backend está rodando em `http://localhost:8080` e se não há firewall/proxy bloqueando.
-- **Porta 8080 em uso:** altere `server.port` em `backend/src/main/resources/application.properties` e a `baseURL` em `frontend/src/services/api.ts`.
-- **Erro ao rodar Maven:** use o wrapper do projeto (`mvnw` / `mvnw.cmd`) em vez do Maven global.
