@@ -36,7 +36,7 @@ public class MovimentoEstoque {
     @Column(name = "valor_venda", nullable = false, precision = 19, scale = 2)
     private BigDecimal valorVenda;
 
-    @Column(name = "data_venda", nullable = false)
+    @Column(name = "data_venda", nullable = true)
     private LocalDateTime dataVenda;
     
     @Column(name = "quantidade_movimentada", nullable = false)
