@@ -130,7 +130,7 @@ watch(
           <select
             id="filtro-produto"
             v-model="filtroProdutoId"
-            class="select-produto"
+            class="filter-select"
             @change="carregarResumo"
           >
             <option value="">Todos os produtos</option>
@@ -167,7 +167,8 @@ watch(
 
       <section class="card table-card">
         <div class="filter-row">
-          <select id="filtro-tipo" v-model="filtroTipo" class="select-tipo">
+          <label for="filtro-tipo" class="filter-label">Tipos de Produtos</label>
+          <select id="filtro-tipo" v-model="filtroTipo" class="filter-select">
             <option value="">Todos os tipos</option>
             <option
               v-for="t in tiposProduto"
@@ -249,31 +250,18 @@ watch(
   margin-bottom: 16px;
 }
 
-.table-card .filter-row {
-  flex-direction: row;
-  align-items: center;
-}
-
-.filter-label {
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--text);
-}
-
-.select-produto {
-  min-width: 0;
-  width: 100%;
-  padding: 8px 10px;
-  border-radius: 8px;
-  font-size: 14px;
-  background: var(--card-bg);
-  color: var(--text);
+.resumo-section .loading,
+.resumo-section .view-error,
+.resumo-section .resumo-cards {
+  min-height: 360px;
 }
 
 .resumo-cards {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  max-height: 360px;
+  overflow-y: auto;
 }
 
 .resumo-card {
@@ -298,27 +286,16 @@ watch(
   color: var(--text);
 }
 
-.card-saida { border-left: 4px solid #dc2626; }
-.card-venda { border-left: 4px solid #059669; }
-.card-lucro { border-left: 4px solid var(--primary); }
+.card-saida { border-left: 4px solid var(--palette-laranja); background: var(--palette-laranja-light); }
+.card-venda { border-left: 4px solid var(--palette-verde-claro); background: var(--palette-verde-claro-light); }
+.card-lucro { border-left: 4px solid var(--palette-verde-escuro); background: var(--palette-verde-escuro-light); }
 
 .table-card {
   max-width: 100%;
 }
 
-.select-tipo {
-  min-width: 180px;
-  padding: 8px 12px;
-  border: 1px solid var(--card-border);
-  border-radius: 8px;
-  font-size: 12px;
-  background: var(--card-bg);
-  color: var(--text);
-}
-
-.select-tipo:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(3, 22, 26, 0.15);
+.table-card .table-wrap {
+  max-height: 360px;
+  overflow-y: auto;
 }
 </style>

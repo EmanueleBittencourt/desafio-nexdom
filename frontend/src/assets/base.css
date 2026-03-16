@@ -4,6 +4,10 @@
   --palette-verde-escuro: #03161a;
   --palette-verde-claro: #6cca98;
   --palette-laranja: #ff7f3f;
+
+  --palette-laranja-light: #fff0e8;
+  --palette-verde-claro-light: #e8f8ef;
+  --palette-verde-escuro-light: #e5ebec;
 }
 
 /* color palette from <https://github.com/vuejs/theme> */
