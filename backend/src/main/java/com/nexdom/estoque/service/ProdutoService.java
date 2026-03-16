@@ -31,21 +31,9 @@ public interface ProdutoService {
 
     LucroProdutoResponse getLucroPorProduto(Long id);
 
-    /**
-     * Retorna resumo (total entrada, saída, lucro). Se produtoId for nulo, considera todos os produtos não excluídos;
-     * caso contrário, apenas o produto com o id informado (se existir e não estiver excluído).
-     */
     ResumoEstoqueDTO getResumoEstoque(Long produtoId);
 
-    /**
-     * Resumo de vendas do produto: quantidade total de saídas, valor total de venda e lucro.
-     * Lucro = Σ (Valor de Venda - Custo de Aquisição) × Qtd Vendida.
-     */
     ResumoVendasProdutoDTO getResumoVendasPorProduto(Long produtoId);
 
-    /**
-     * Resumo de vendas. Se produtoId for nulo, retorna totais de todos os produtos não excluídos;
-     * caso contrário, retorna apenas do produto informado.
-     */
     ResumoVendasProdutoDTO getResumoVendas(Long produtoId);
 }

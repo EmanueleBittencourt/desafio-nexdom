@@ -123,7 +123,17 @@ public class ProdutoServiceImpl implements ProdutoService {
         if (produto.getQuantidadeEstoque() == null) {
             produto.setQuantidadeEstoque(0);
         }
-        return produtoRepository.saveAndFlush(produto);
+        Produto salvo = produtoRepository.saveAndFlush(produto);
+        if (salvo.getQuantidadeEstoque() != null && salvo.getQuantidadeEstoque() > 0) {
+            MovimentoEstoque entrada = new MovimentoEstoque();
+            entrada.setProduto(salvo);
+            entrada.setTipo(TipoMovimento.ENTRADA);
+            entrada.setQuantidadeMovimentada(salvo.getQuantidadeEstoque());
+            entrada.setValorVenda(BigDecimal.ZERO);
+            entrada.setDataVenda(agora);
+            movimentoEstoqueRepository.save(entrada);
+        }
+        return salvo;
     }
 
     @Override
