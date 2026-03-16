@@ -168,8 +168,9 @@ class ProdutoServiceImplTest {
 
         Produto result = produtoService.atualizar(1L, atual);
 
-        assertThat(produto.getCodigo()).isEqualTo("COD-1-UPD");
-        assertThat(produto.getQuantidadeEstoque()).isEqualTo(5);
+        assertThat(result).isNotNull().isSameAs(produto);
+        assertThat(result.getCodigo()).isEqualTo("COD-1-UPD");
+        assertThat(result.getQuantidadeEstoque()).isEqualTo(5);
         verify(produtoRepository).save(produto);
     }
 

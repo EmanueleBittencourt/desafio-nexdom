@@ -103,6 +103,8 @@ class MovimentoEstoqueServiceImplTest {
 
         MovimentoEstoque result = movimentoEstoqueService.criar(movimentoEntrada);
 
+        assertThat(result).isNotNull().isSameAs(movimentoEntrada);
+        assertThat(result.getId()).isEqualTo(1L);
         assertThat(produto.getQuantidadeEstoque()).isEqualTo(15);
         verify(produtoRepository).save(produto);
         verify(movimentoEstoqueRepository).save(movimentoEntrada);

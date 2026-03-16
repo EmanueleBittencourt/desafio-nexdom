@@ -5,7 +5,6 @@ import com.nexdom.estoque.dto.LucroProdutoResponse;
 import com.nexdom.estoque.dto.ProdutoComResumoDTO;
 import com.nexdom.estoque.dto.ResumoEstoqueDTO;
 import com.nexdom.estoque.dto.ResumoVendasProdutoDTO;
-import com.nexdom.estoque.dto.TipoProdutoOption;
 import com.nexdom.estoque.model.Produto;
 import com.nexdom.estoque.model.TipoProduto;
 import com.nexdom.estoque.service.ProdutoService;
